@@ -21,12 +21,13 @@ app.use(function (req, res, next) {
         next();
     }
 });
-
+/*
 app.use(seo({
     cacheClient: 'redis', // Can be 'disk' or 'redis'
     cacheDuration: 2 * 60 * 60 * 24 * 1000, // In milliseconds
     redisUrl: redis.redisUrl
 }));
+*/
 
 app.get('/*', function(request, response) {
     var key = request.query['key'];
