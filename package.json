@@ -7,10 +7,11 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.7.2",
-    "morgan": "^1.2.2",
-    "redis": "^0.11.0",
-    "rsvp": "~3.0.9"
+    "express": "^4.10.6",
+    "mean-seo": "0.0.8",
+    "morgan": "^1.5.0",
+    "redis": "^0.12.1",
+    "rsvp": "~3.0.16"
   },
   "engines": {
     "node": "0.10.x"
