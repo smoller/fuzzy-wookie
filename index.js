@@ -21,26 +21,24 @@ app.use(function (req, res, next) {
         next();
     }
 });
-/*
+
 app.use(seo({
     cacheClient: 'redis', // Can be 'disk' or 'redis'
     cacheDuration: 2 * 60 * 60 * 24 * 1000, // In milliseconds
-    redisUrl: redis.redisUrl
+    redisURL: redis.redisUrl
 }));
-*/
 
 app.get('/*', function(request, response) {
     var key = request.query['key'];
 
-    redis.connect().then(function() {
+    var promise = new RSVP.Promise(function(resolve) {
         if (!key) {
-            return redis.get(appName + ':current');
+            return resolve(redis.get(appName + ':current'));
         }
 
-        return RSVP.resolve(key);
-    })
-    .then(function(key) {
-        return redis.get(appName + ':' + key);
+        return resolve(appName + ':' + key);
+    }).then(function(key) {
+        return redis.get(key);
     })
     .then(function(data) {
         if (data) {
