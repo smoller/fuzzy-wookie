@@ -4,9 +4,17 @@ var RSVP      = require('rsvp'),
     seo       = require('mean-seo'),
     redis     = require('./lib/redis'),
     logFormat = process.env.LOG_FORMAT || 'short',
-    appName   = process.env.APP_NAME || 'default';
+    appName   = process.env.APP_NAME || 'default',
+    env       = process.env.NODE_ENV || 'development';
 
 var app       = express();
+
+var forceSSL  = function (req, res, next) {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+        return res.redirect(['https://', req.get('Host'), req.url].join(''));
+    }
+    return next();
+};
 
 app.set('port', (process.env.PORT || 5000));
 
@@ -22,11 +30,16 @@ app.use(function (req, res, next) {
     }
 });
 
-app.use(seo({
-    cacheClient: 'redis', // Can be 'disk' or 'redis'
-    cacheDuration: 2 * 60 * 60 * 24 * 1000, // In milliseconds
-    redisURL: redis.redisUrl
-}));
+if (env === 'production') {
+    app.use(seo({
+        cacheClient: 'redis', // Can be 'disk' or 'redis'
+        cacheDuration: 2 * 60 * 60 * 24 * 1000, // In milliseconds
+        redisURL: redis.redisUrl
+    }));
+
+    app.use(forceSSL);
+
+}
 
 app.get('/*', function(request, response) {
     var key = request.query['key'];
