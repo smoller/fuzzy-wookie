@@ -37,7 +37,7 @@ if (env === 'production') {
         redisURL: redis.redisUrl
     }));
 
-    app.use(forceSSL);
+    //app.use(forceSSL);
 
 }
 
